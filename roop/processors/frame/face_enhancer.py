@@ -19,7 +19,6 @@ if 'ROCMExecutionProvider' in roop.globals.execution_providers:
 CODE_FORMER = None
 FACE_ENHANCER = None
 THREAD_LOCK = threading.Lock()
-THREAD_SEMAPHORE = threading.Semaphore()
 NAME = 'Face Enhancer'
 
 
@@ -86,8 +85,7 @@ def restore_face(face_in_tensor) -> Any:
         enhanced_face_in_tensor = enhance_face_in_tensor(face_in_tensor)
         return convert_tensor_to_image(enhanced_face_in_tensor)
     except RuntimeError:
-        pass
-    return convert_tensor_to_image(face_in_tensor)
+        return convert_tensor_to_image(face_in_tensor)
 
 
 def enhance_face_in_frame(face_list):
@@ -130,7 +128,7 @@ def paste_face_back(temp_frame, face_enhanced_list, matrix_list):
     return target_img
 
 
-def process_frame(source_face: any, temp_frame: any) -> any:
+def process_frame(source_face: Any, temp_frame: Any) -> any:
     face_list, matrix_list = align_warp_face(temp_frame)
     face_enhanced_list = enhance_face_in_frame(face_list)
     result = paste_face_back(temp_frame, face_enhanced_list, matrix_list)
@@ -139,13 +137,9 @@ def process_frame(source_face: any, temp_frame: any) -> any:
 
 def process_frames(source_path: str, frame_paths: list[str], progress=None) -> None:
     for frame_path in frame_paths:
-        try:
-            frame = cv2.imread(frame_path)
-            result = process_frame(None, frame)
-            cv2.imwrite(frame_path, result)
-        except Exception as exception:
-            print(exception)
-            continue
+        frame = cv2.imread(frame_path)
+        result = process_frame(None, frame)
+        cv2.imwrite(frame_path, result)
         if progress:
             progress.update(1)
 

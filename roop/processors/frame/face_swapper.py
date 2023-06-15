@@ -51,12 +51,8 @@ def process_frames(source_path: str, temp_frame_paths: List[str], progress=None)
     source_face = get_one_face(cv2.imread(source_path))
     for temp_frame_path in temp_frame_paths:
         temp_frame = cv2.imread(temp_frame_path)
-        try:
-            result = process_frame(source_face, temp_frame)
-            cv2.imwrite(temp_frame_path, result)
-        except Exception as exception:
-            print(exception)
-            pass
+        result = process_frame(source_face, temp_frame)
+        cv2.imwrite(temp_frame_path, result)
         if progress:
             progress.update(1)
 
